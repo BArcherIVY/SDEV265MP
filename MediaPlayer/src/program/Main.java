@@ -9,7 +9,7 @@ public class Main {
 	public static void main(String[] args) {
 
 		Platform.startup(() -> {
-		}); // Stops JavaFX from freaking out
+		}); // Stops JavaFX from freaking out because no GUI
 
 		MusicBox mb = new MusicBox();
 		// do annex shits

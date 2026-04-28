@@ -10,7 +10,7 @@ public class MusicBox {
 	private MediaPlayer mediaPlayer;
 
 	public void playMP3(String path) {
-		if (mediaPlayer != null) { // stop current Mp3.
+		if (mediaPlayer != null) { // stop current Mp3 from playing.
 			mediaPlayer.stop();
 		}
 

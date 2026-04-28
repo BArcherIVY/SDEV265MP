@@ -42,7 +42,7 @@ public class Annex {
 
 							fileMap.put(songTitle, path.toAbsolutePath().toString()); // HASHMAPS!!!
 						} catch (Exception e) {
-							// if no tag, use filenames.
+							// if no tag, use filename.
 							fileMap.put(path.getFileName().toString(), path.toAbsolutePath().toString());
 						}
 					});
