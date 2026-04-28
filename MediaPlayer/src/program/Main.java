@@ -1,26 +1,29 @@
 package program;
 
-import java.io.File;
+import java.util.Scanner;
 
-import javax.swing.JFileChooser;
+import fileControl.Annex;
+import javafx.application.Platform;
 
 public class Main {
 	public static void main(String[] args) {
-		JFileChooser chooser = new JFileChooser(); //file prompt
-		chooser.setDialogTitle("Select a Folder");
-		chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-		int result = chooser.showOpenDialog(null);
-		
-		if (result == JFileChooser.APPROVE_OPTION) {
-			
-            File selectedFile = chooser.getSelectedFile();
-            System.out.println("Selected path: " + selectedFile.getAbsolutePath());
-            fileControl.Annex.RunAnnex(selectedFile.getAbsolutePath());
-        } else {
-        	
-            System.out.println("No selection made.");
-            
-        }
-        
-    }
+
+		Platform.startup(() -> {
+		}); // Stops JavaFX from freaking out
+
+		MusicBox mb = new MusicBox();
+		// do annex shit
+		String filePath = Annex.ChooseFile();
+		if (filePath != null) {
+			Annex.RunAnnex(filePath);
+			mb.playMP3(Annex.finalMap.get("Bad Moons.mp3"));
+			System.out.println("Playing... Press ENTER to stop.");
+			new Scanner(System.in).nextLine();
+			mb.stopMp3();
+		} else {
+			System.out.println("FUCK!");
+			return;
+		}
+
+	}
 }
