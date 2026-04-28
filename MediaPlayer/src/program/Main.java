@@ -12,7 +12,7 @@ public class Main {
 		}); // Stops JavaFX from freaking out
 
 		MusicBox mb = new MusicBox();
-		// do annex shit
+		// do annex shits
 		String filePath = Annex.ChooseFile();
 		if (filePath != null) {
 			Annex.RunAnnex(filePath);
@@ -20,6 +20,7 @@ public class Main {
 			System.out.println("Playing... Press ENTER to stop.");
 			new Scanner(System.in).nextLine();
 			mb.stopMp3();
+
 		} else {
 			System.out.println("FUCK!");
 			return;
