@@ -1,7 +1,5 @@
 package program;
 
-import java.util.Scanner;
-
 import fileControl.Annex;
 import javafx.application.Platform;
 
@@ -12,14 +10,17 @@ public class Main {
 		}); // Stops JavaFX from freaking out because no GUI
 
 		MusicBox mb = new MusicBox();
-		// do annex shits
 		String filePath = Annex.ChooseFile();
+
 		if (filePath != null) {
-			Annex.RunAnnex(filePath);
-			mb.playMP3(Annex.finalMap.get("Bad Moons.mp3"));
-			System.out.println("Playing... Press ENTER to stop.");
-			new Scanner(System.in).nextLine();
-			mb.stopMp3();
+			Annex.RunAnnex(filePath); // Sitting there for 20 mins wondering why annex isn't working.... I didn't call
+										// it.
+			System.out.println("DEBUG: Map size is: " + Annex.albumMap.size());
+			System.out.println("--- Library Contents ---");
+
+			for (String name : Annex.albumMap.keySet()) {
+				System.out.println("Album found: " + name);
+			}
 
 		} else {
 			System.out.println("FUCK!");

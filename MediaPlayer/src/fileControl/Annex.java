@@ -16,12 +16,15 @@ import org.jaudiotagger.audio.AudioFileIO;
 import org.jaudiotagger.tag.FieldKey;
 import org.jaudiotagger.tag.Tag;
 
-public class Annex {
-	public static Map<String, String> finalMap = new HashMap<>();
+public class Annex { // Please note, nothing in the annex should be getting saved on close.
+	public static Map<String, Album> albumMap = new HashMap<>();
+	public static Map<String, String> pathMap = new HashMap<>();
 
 	public static int RunAnnex(String Folder) {
 		Path targetFolder = Paths.get(Folder);
 		Map<String, String> fileMap = new HashMap<>(); // I LOVE HASHMAPS!!!!!
+
+		System.out.println("Running Annex..");
 
 		try (Stream<Path> stream = Files.walk(targetFolder)) {
 			stream.filter(Files::isRegularFile).filter(path -> path.toString().toLowerCase().endsWith(".mp3")) // make
@@ -34,13 +37,17 @@ public class Annex {
 							AudioFile audioFile = AudioFileIO.read(path.toFile());
 							Tag tag = audioFile.getTag();
 
-							String songTitle = (tag != null) ? tag.getFirst(FieldKey.TITLE) : null; // Check title
+							String songTitle = (tag != null) ? tag.getFirst(FieldKey.TITLE) : null; // check titles
+							String albumName = (tag != null) ? tag.getFirst(FieldKey.ALBUM) : null;
 
-							if (songTitle == null || songTitle.isEmpty()) {
+							if (songTitle == null || songTitle.isEmpty()) { // check both cases... not exactly sure
 								songTitle = path.getFileName().toString();
 							}
 
-							fileMap.put(songTitle, path.toAbsolutePath().toString()); // HASHMAPS!!!
+							sortSong(songTitle, path.toAbsolutePath().toString(), albumName); // we're putting it in
+																								// both of these.
+							// having a list that contains only paths could be handy in the future.
+							fileMap.put(songTitle, path.toAbsolutePath().toString());
 						} catch (Exception e) {
 							// if no tag, use filename.
 							fileMap.put(path.getFileName().toString(), path.toAbsolutePath().toString());
@@ -49,7 +56,7 @@ public class Annex {
 
 			// print list to log and return 1.
 			fileMap.forEach((name, path) -> System.out.println(name + " -> " + path));
-			finalMap = fileMap;
+			pathMap = fileMap;
 			return 1;
 
 		} catch (IOException e) {
@@ -58,6 +65,7 @@ public class Annex {
 		}
 	}
 
+	// just brings up a menu to choose a folder
 	public static String ChooseFile() {
 		JFileChooser chooser = new JFileChooser(); // file prompt
 		chooser.setDialogTitle("Select a Folder");
@@ -75,4 +83,19 @@ public class Annex {
 
 		}
 	}
+
+	public static void sortSong(String title, String path, String albumName) {
+
+		// if it has a name, name it x, if not. default to unknown album.
+		String name = (albumName == null || albumName.isEmpty()) ? "Unknown Album" : albumName;
+		if (!albumMap.containsKey(name)) { // creates album dynamically.
+			albumMap.put(name, new Album(name));
+		}
+
+		Song newSong = new Song(title, path, name); // add song to album anyway.
+		albumMap.get(name).addSong(newSong);
+		System.out.println("Added song " + title + " to " + albumName);
+
+	}
+
 }
