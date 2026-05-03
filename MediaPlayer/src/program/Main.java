@@ -23,7 +23,7 @@ public class Main {
 			}
 
 		} else {
-			System.out.println("FUCK!");
+			System.out.println("Error on filepath!");
 			return;
 		}
 

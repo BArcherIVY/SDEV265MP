@@ -19,6 +19,9 @@ import org.jaudiotagger.tag.Tag;
 public class Annex { // Please note, nothing in the annex should be getting saved on close.
 	public static Map<String, Album> albumMap = new HashMap<>();
 	public static Map<String, String> pathMap = new HashMap<>();
+	// add playlist to map when created, but loading a playlist will automatically
+	// add it.
+	public static Map<String, Playlist> playlists = new HashMap<>();
 
 	public static int RunAnnex(String Folder) {
 		Path targetFolder = Paths.get(Folder);
@@ -57,6 +60,19 @@ public class Annex { // Please note, nothing in the annex should be getting save
 			// print list to log and return 1.
 			fileMap.forEach((name, path) -> System.out.println(name + " -> " + path));
 			pathMap = fileMap;
+
+			Path targetPath = Paths.get(Folder);
+			Path playlistFolder = targetPath.resolve("playlists"); // This appends "playlists" to your path
+
+			try {
+				// This creates the Playlist folder if it doesn't exist.
+				Files.createDirectories(playlistFolder);
+
+				System.out.println("Playlist directory verified at: " + playlistFolder.toAbsolutePath());
+			} catch (IOException e) {
+				System.err.println("Could not create playlist folder: " + e.getMessage());
+			}
+
 			return 1;
 
 		} catch (IOException e) {
@@ -84,6 +100,7 @@ public class Annex { // Please note, nothing in the annex should be getting save
 		}
 	}
 
+	// sorts into album
 	public static void sortSong(String title, String path, String albumName) {
 
 		// if it has a name, name it x, if not. default to unknown album.
@@ -96,6 +113,13 @@ public class Annex { // Please note, nothing in the annex should be getting save
 		albumMap.get(name).addSong(newSong);
 		System.out.println("Added song " + title + " to " + albumName);
 
+	}
+
+	public static void loadPlaylists(String rootFolder) {
+
+		Path playlistDir = Paths.get(rootFolder, "playlists");
+		if (!Files.exists(playlistDir))
+			return; // verify the playlist directory exists
 	}
 
 }
