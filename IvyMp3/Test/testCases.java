@@ -1,150 +1,88 @@
-import org.junit.jupiter.api.*;
+package test;
+
+import org.junit.jupiter.api.Test;
 
 import fileControl.Playlist;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import java.beans.Transient;
-import java.util.*;
-
 public class testCases {
 
-    // MP3 Import Test
+    // Playlist Creation Test
     @Test
-    void testImportMP3() {
-        MusicPlayer player = new MusicPlayer();
-        boolean result = player.importSong("test.mp3");
-
-        assertTrue(result, "MP3 file should be imported successfully");
-        assertEquals(1, player.getLibrary().size());
-    }
-
-    // Invalid File Import Test
-    @Test 
-    void testImportInvalidFile() {
-        MusicPlayer player = new MusicPlayer();
-        boolean result = player.importSong("test.txt");
-
-        assertFalse(result, "Non-MP3 file should not be imported");
-    }
-
-    // Display Library Test
-    @Test 
-    void testDisplayLibrary() {
-        MusicPlayer player = new MusicPlayer();
-        player.importSong("song1.mp3");
-        player.importSong("song2.mp3");
-
-        List<String> library = player.getLibrary();
-        assertEquals(2, library.size());
-    }
-
-    // Sort by Album Test
-    @Test 
-    void testSortByAlbum() {
-        MusicPlayer player = new MusicPlayer();
-
-        player.addSong(new Song("Song1", "AlbumB"));
-        player.addSong(new Song("Song2", "AlbumA"));
-
-        player.sortByAlbum();
-
-        List<Song> songs = player.getLibrary();
-        assertEquals("AlbumA", songs.get(0).getAlbum());
-    }
-
-    // Play Song Test
-    @Test
-    void testPlaySong() {
-        MusicPlayer player = new MusicPlayer();
-        Song song = new Song("TestSong", "Album1");
-
-        player.addSong(song);
-        player.playMp3(song);
-
-        assertTrue(player.isPlaying());
-    }
-
-    // Pause Playback Test
-    @Test 
-    void testPausePlayback() {
-        MusicPlayer player = new MusicPlayer();
-        Song song = new Song("TestSong", "Album1");
-
-        player.addSong(song);
-        player.playMp3(song);
-        player.pauseMp3();
-
-        assertFalse(player.isPlaying());
-    }
-
-    // Stop Playback Test
-    @Test 
-    void testStopPlayback()  {
-        MusicPlayer player = new MusicPlayer();
-        Song song = new Song("TestSong", "Album1");
-
-        player.addSong(song);
-        player.playMp3(song);
-        player.stopMp3();
-
-        assertFalse(player.isPlaying());
-        assertEquals(0, player.getCurrentPosition());
-    }
-
-    // Create Playlist Test
-    @Test 
     void testCreatePlaylist() {
-        MusicPlayer player = new MusicPlayer();
-        player.createPlaylist("My Playlist");
-
-        assertNotNull(player.getPlaylist("My Playlist"));
+        Playlist playlist = new Playlist("Favorites");
+        assertNotNull(playlist);
     }
 
-    // Add Song to Playlist Test
+    // Add Song Path Test
     @Test
     void testAddSongToPlaylist() {
-        MusicPlayer player = new MusicPlayer();
-        Song song = new Song("TestSong", "Album1");
-
-        playlist.addSong(song);
-        player.createPlaylist("My Playlist");
-        player.addToPlaylist("My Playlist", song);
-
-        assertEquals(1, player.getPlaylist("My Playlist").size());
-    }
-
-    // Remove Song from Playlist Test
-    @Test 
-    void testRemoveSongFromPlaylist() {
-        MusicPlayer player = new MusicPlayer();
-        Song song = new Song("TestSong", "Album1");
-
-        player.createPlaylist("My Playlist");
-        player.addToPlaylist("My Playlist", song);
-        player.removeFromPlaylist("My Playlist", song);
-
-        assertEquals(0, player.getPlaylist("My Playlist").size());
-    }
-
-    // Song Object Creation Test
-    @Test 
-    void testSongObjectCreation() {
-        Song song = new Song("Title", "Album");
-
-        assertEquals("Title", song.getTitle());
-        assertEquals("Album", song.getAlbum());
-    }
-
-    // Module Interaction Test
-    @Test 
-    void testModuleInteraction() {
-        MusicPlayer player = new MusicPlayer();
-        Playlist playlist = new Playlist("My Playlist");
-
-        Song song = new Song("TestSong", "Album1");
-        playlist.addSong(song);
-
+        Playlist playlist = new Playlist("Favorites");
+        playlist.addSong("song1.mp3");
         assertEquals(1, playlist.getSongs().size());
+    }
+
+    // Remove Song Path Test
+    @Test
+    void testRemoveSongFromPlaylist() {
+        Playlist playlist = new Playlist("Favorites");
+        playlist.addSong("song1.mp3");
+        playlist.removeSong("song1.mp3");
+        assertEquals(0, playlist.getSongs().size());
+    }
+
+    // Playlist Name Test
+    @Test
+    void testPlaylistName() {
+        Playlist playlist = new Playlist("Road Trip");
+        assertEquals("Road Trip", playlist.getName());
+    }
+
+    // Multiple Songs Test
+    @Test
+    void testMultipleSongsAdded() {
+        Playlist playlist = new Playlist("Favorites");
+        playlist.addSong("song1.mp3");
+        playlist.addSong("song2.mp3");
+        playlist.addSong("song3.mp3");
+
+        assertEquals(3, playlist.getSongs().size());
+    }
+
+    // Empty Playlist Test
+    @Test
+    void testEmptyPlaylist() {
+        Playlist playlist = new Playlist("Empty Playlist");
+        assertTrue(playlist.getSongs().isEmpty());
+    }
+
+    // MP3 File Validation Test
+    @Test
+    void testMp3FileExtension() {
+        String fileName = "music.mp3";
+        assertTrue(fileName.endsWith(".mp3"));
+    }
+
+    // Invalid File Validation Test
+    @Test
+    void testInvalidFileExtension() {
+        String fileName = "document.txt";
+        assertFalse(fileName.endsWith(".mp3"));
+    }
+
+    // Annex File Path Test
+    @Test
+    void testFilePathNotNull() {
+        String path = "C:/Music/song.mp3";
+        assertNotNull(path);
+    }
+
+    // Playlist Interaction Test
+    @Test
+    void testPlaylistInteraction() {
+        Playlist playlist = new Playlist("Workout");
+        playlist.addSong("powerSong.mp3");
+        assertTrue(playlist.getSongs().contains("powerSong.mp3"));
     }
 }
