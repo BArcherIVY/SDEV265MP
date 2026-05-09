@@ -7,7 +7,7 @@ While our program does not have a dedicated installer, running the program withi
 
 2. Click  "Code" at the top and download the ZIP.
 
-3. Extract into the IvyMp3.
+3. Extract the IvyMp3.
 
 4. Navigate to /IvyMp3/src/program and open Main.java within your preferred IDE.
 
