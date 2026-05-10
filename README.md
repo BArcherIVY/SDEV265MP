@@ -11,4 +11,6 @@ While our program does not have a dedicated installer, running the program withi
 
 4. Navigate to /IvyMp3/src/program and open Main.java within your preferred IDE.
 
-5. Run the file within the IDE to access the program.
+5. Ensure that JavaFX is properly installed and configured in your IDE.
+
+6. Run the file within the IDE to access the program.
